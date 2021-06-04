@@ -20,6 +20,9 @@ Directory contents when software is included.
 ```
 $ tree
 .
++--- config
+|   +--- install.env
+|   +--- vagrant.yml
 +--- README.md
 +--- scripts
 |   +--- dbora.service
@@ -34,13 +37,13 @@ $ tree
 |   +--- server.xml
 |   +--- setup.sh
 +--- software
-|   +--- apache-tomcat-9.0.37.tar.gz
-|   +--- apex_20.1_en.zip
+|   +--- apache-tomcat-9.0.45.tar.gz
+|   +--- apex_21.1_en.zip
 |   +--- LINUX.X64_180000_db_home.zip
-|   +--- OpenJDK11U-jdk_x64_linux_hotspot_11.0.8_10.tar.gz
-|   +--- ords-20.2.0.178.1804.zip
+|   +--- OpenJDK11U-jdk_x64_linux_hotspot_11.0.11_9.tar.gz
+|   +--- ords-21.1.1.116.2032.zip
 |   +--- put_software_here.txt
-|   +--- sqlcl-20.2.0.174.1557.zip
+|   +--- sqlcl-21.1.0.104.1544.zip
 +--- Vagrantfile
 $
 ```

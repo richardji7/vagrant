@@ -24,7 +24,7 @@ You will also need to download the 19c grid and database software, along with th
 
 * [Grid : LINUX.X64_193000_grid_home.zip](https://www.oracle.com/database/technologies/oracle19c-linux-downloads.html)
 * [Database : LINUX.X64_193000_db_home.zip](https://www.oracle.com/database/technologies/oracle19c-linux-downloads.html)
-* [Patch 31326369: COMBO OF OJVM RU COMPONENT 19.8.0.0.200714 + GI RU 19.8.0.0.200714](https://support.oracle.com)
+* [Patch 32126842: COMBO OF OJVM RU COMPONENT 19.10.0.0.210119 + GI RU 19.10.0.0.210119](https://support.oracle.com)
 * [Patch 6880880: OPatch 19.x](https://updates.oracle.com/download/6880880.html)
 
 ## Warning
@@ -107,7 +107,7 @@ $ tree
 |   +--- LINUX.X64_193000_db_home.zip
 |   +--- LINUX.X64_193000_grid_home.zip
 |   +--- p6880880_190000_Linux-x86-64.zip
-|   +--- p31326369_190000_Linux-x86-64.zip
+|   +--- p32126842_190000_Linux-x86-64.zip
 |   +--- put_software_here.txt
 
 $ 
@@ -201,3 +201,31 @@ vagrant destroy -f
 ```
 
 Check all the shared disks have been removed as expected. If they are left behind they will be reused, which will cause problems.
+
+## Windows Host Build Failure (Workaround)
+
+When using a Windows host, you may see something like this.
+
+* DNS up and running.
+* Node2 up and running.
+* Node1 grid configuration fails with the following error.
+
+```
+default: Do grid software-only installation. Wed Nov 18 23:32:46 UTC 2020
+default: ******************************************************************************
+default: Launching Oracle Grid Infrastructure Setup Wizard...
+default: [FATAL] [INS-40718] Single Client Access Name (SCAN):ol7-19-scan could not be resolved.
+default:    CAUSE: The name you provided as the SCAN could not be resolved using TCP/IP host name lookup.
+default:    ACTION: Provide name to use for the SCAN for which the domain can be resolved.
+```
+
+I have seen this a few times on a Windows laptop (my main workstation). I've not seen it on macOS or Linux. It is almost like Node1 can't see the DNS, even though it is there, and Node2 can see it. I figure it must be some silly eccentricity of VirtualBox on Windows.
+
+I do have a workaround for this.
+
+* Start up DNS.
+* Start Node2.
+* Start Node1.
+* While Node1 is doing the OS prerequisites, stop and start the DNS node (vagrant halt, then vagrant up). That's not a rebuild. Just a restart. Clearly the DNS must be restarted before the installation takes place.
+
+Something about the DNS restart allows Node1 to see the DNS.

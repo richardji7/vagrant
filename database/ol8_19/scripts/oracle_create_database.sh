@@ -1,3 +1,5 @@
+. /vagrant/config/install.env
+
 echo "******************************************************************************"
 echo "Create a listener.ora file if it doesn't already exist." `date`
 echo "******************************************************************************"
@@ -96,7 +98,7 @@ EOF
     echo "Unzip APEX software." `date`
     echo "******************************************************************************"
     cd ${SOFTWARE_DIR}
-    unzip -oq ${APEX_SOFTWARE}
+    unzip -oq /vagrant/software/${APEX_SOFTWARE}
     cd apex
 
 
@@ -120,10 +122,10 @@ BEGIN
     COMMIT;
 END;
 /
-@apex_rest_config.sql ${APEX_PASSWORD} ${APEX_PASSWORD}
+@apex_rest_config.sql "${APEX_PASSWORD}" "${APEX_PASSWORD}"
 --@apex_epg_config.sql ${SOFTWARE_DIR}
-alter user APEX_PUBLIC_USER identified by ${APEX_PASSWORD} account unlock;
-alter user APEX_REST_PUBLIC_USER identified by ${APEX_PASSWORD} account unlock;
+alter user APEX_PUBLIC_USER identified by "${APEX_PASSWORD}" account unlock;
+alter user APEX_REST_PUBLIC_USER identified by "${APEX_PASSWORD}" account unlock;
 exit;
 EOF
 

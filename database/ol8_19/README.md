@@ -15,7 +15,7 @@ A simple Vagrant build for Oracle Database 19c on Oracle Linux 8.
 
 If you want to patch the installation, you will also need these downloads.
 
-* [Patch 31326362: COMBO OF OJVM RU COMPONENT 19.8.0.0.200714 + DB RU 19.8.0.0.200714](https://support.oracle.com)
+* [Patch 32126828: COMBO OF OJVM RU COMPONENT 19.10.0.0.210119 + DB RU 19.10.0.0.210119](https://support.oracle.com)
 * [Patch 6880880: OPatch 19.x](https://updates.oracle.com/download/6880880.html)
 
 Place the software in the "software" directory before calling the `vagrant up` command.
@@ -25,6 +25,9 @@ Directory contents when software is included.
 ```
 $ tree
 .
++--- config
+|   +--- install.env
+|   +--- vagrant.yml
 +--- README.md
 +--- scripts
 |   +--- dbora.service
@@ -39,26 +42,20 @@ $ tree
 |   +--- server.xml
 |   +--- setup.sh
 +--- software
-|   +--- apache-tomcat-9.0.38.tar.gz
-|   +--- apex_20.1_en.zip
+|   +--- apache-tomcat-9.0.45.tar.gz
+|   +--- apex_21.1_en.zip
 |   +--- LINUX.X64_193000_db_home.zip
-|   +--- OpenJDK11U-jdk_x64_linux_hotspot_11.0.8_10.tar.gz
-|   +--- ords-20.2.0.178.1804.zip
-|   +--- p31326362_190000_Linux-x86-64.zip
+|   +--- OpenJDK11U-jdk_x64_linux_hotspot_11.0.11_9.tar.gz
+|   +--- ords-21.1.1.116.2032.zip
+|   +--- p32578972_190000_Linux-x86-64.zip
 |   +--- p6880880_190000_Linux-x86-64.zip
 |   +--- put_software_here.txt
-|   +--- sqlcl-20.2.0.174.1557.zip
+|   +--- sqlcl-21.1.0.104.1544.zip
 +--- Vagrantfile
 $
 ```
 
-If you want to include the patches, edit the "root_setup.sh" script to uncomment the reference to the "oracle_software_patch.sh" script.
-
-```
-# Uncomment the following line if you want to apply patches.
-# You must have downloaded the patches and amended the "oracle_software_patch.sh" script.
-su - oracle -c '/u01/software/oracle_software_patch.sh'
-```
+If you want to include the patches, edit the PATCH_DB parameter in the "install.env" file.
 
 With everything in place, you can initiate the build as follows.
 

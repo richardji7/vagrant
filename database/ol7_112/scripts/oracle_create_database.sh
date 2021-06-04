@@ -1,3 +1,5 @@
+. /vagrant/config/install.env
+
 echo "******************************************************************************"
 echo "Create a listener.ora file if it doesn't already exist." `date`
 echo "******************************************************************************"
@@ -25,15 +27,6 @@ ${ORACLE_SID}=
     (SERVICE_NAME = ${ORACLE_SID})
   )
 )
-${PDB_NAME}= 
-(DESCRIPTION = 
-  (ADDRESS = (PROTOCOL = TCP)(HOST = 0.0.0.0)(PORT = 1521))
-  (CONNECT_DATA =
-    (SERVER = DEDICATED)
-    (SERVICE_NAME = ${PDB_NAME})
-  )
-)
-EOF
 
   cat > ${ORACLE_HOME}/network/admin/sqlnet.ora <<EOF
 SQLNET.INBOUND_CONNECT_TIMEOUT=400
@@ -87,10 +80,19 @@ EOF
   if [ "$INSTALL_APEX" = "true" ]; then
 
     echo "******************************************************************************"
+    echo "Remove pre-installed APEX." `date`
+    echo "******************************************************************************"
+    cd ${ORACLE_HOME}/apex
+    sqlplus / as sysdba <<EOF
+@apxremov.sql
+exit;
+EOF
+
+    echo "******************************************************************************"
     echo "Unzip APEX software." `date`
     echo "******************************************************************************"
     cd ${SOFTWARE_DIR}
-    unzip ${APEX_SOFTWARE}
+    unzip -oq /vagrant/software/${APEX_SOFTWARE}
     cd apex
 
 
@@ -113,10 +115,10 @@ BEGIN
     COMMIT;
 END;
 /
-@apex_rest_config.sql ${APEX_PASSWORD} ${APEX_PASSWORD}
+@apex_rest_config.sql "${APEX_PASSWORD}" "${APEX_PASSWORD}"
 --@apex_epg_config.sql ${SOFTWARE_DIR}
-alter user APEX_PUBLIC_USER identified by ${APEX_PASSWORD} account unlock;
-alter user APEX_REST_PUBLIC_USER identified by ${APEX_PASSWORD} account unlock;
+alter user APEX_PUBLIC_USER identified by "${APEX_PASSWORD}" account unlock;
+alter user APEX_REST_PUBLIC_USER identified by "${APEX_PASSWORD}" account unlock;
 exit;
 EOF
 
